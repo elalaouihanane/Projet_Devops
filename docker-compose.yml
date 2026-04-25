@@ -1,6 +1,6 @@
 services:
   app:
-    build:
+   image: leilaboualam/projet-app:v1
       context: ./backend
       dockerfile: Dockerfile
     container_name: laravel_app
@@ -60,7 +60,7 @@ services:
       - laravel_net
 
   frontend:
-    build:
+    image: leilaboualam/projet-frontend:v1
       context: ./frontend
       dockerfile: Dockerfile
     container_name: angular_app
