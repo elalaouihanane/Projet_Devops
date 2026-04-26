@@ -1,0 +1,25 @@
+# Node / Angular
+node_modules/
+dist/
+.angular/
+.env
+
+# Laravel / PHP
+/vendor/
+.env
+/storage/*.key
+/public/storage
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose.override.yml
+
+# IDE
+.vscode/
+.idea/
