@@ -7,18 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-class Like extends Model
+class Favorite extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'likeable_id', 'likeable_type'];
+    protected $fillable = ['user_id', 'favoritable_id', 'favoritable_type'];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function likeable(): MorphTo
+    public function favoritable(): MorphTo
     {
         return $this->morphTo();
     }

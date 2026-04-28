@@ -11,7 +11,11 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CategorySeeder::class,  // D'abord (pas de dépendances)
             UserSeeder::class,      // Ensuite (pas de dépendances)
-            ArticleSeeder::class,   // En dernier (besoin de users et categories)
+            ArticleSeeder::class,
+            LikeSeeder::class,      // Khtachin Users w Articles
+            CommentSeeder::class,   // Khtachin Users w Articles
+            FavoriteSeeder::class,  // Khtachin Users w Articles
+            FollowSeeder::class,
         ]);
     }
 }
