@@ -109,9 +109,7 @@ class AuthTest extends TestCase
         
         // Image PNG factice (1x1 pixel transparent) — contourne le manque de GD
         $tempFile = tempnam(sys_get_temp_dir(), 'test');
-        file_put_contents($tempFile, base64_decode(
-            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
-        ));
+        file_put_contents($tempFile, base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='));
         
         $file = new UploadedFile(
             $tempFile,
