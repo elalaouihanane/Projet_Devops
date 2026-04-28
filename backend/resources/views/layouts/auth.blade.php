@@ -29,21 +29,6 @@
                 <h1 class="auth-brand__title">@yield('brand_title', 'Partagez votre style. Inspirez les autres.')</h1>
                 <p class="auth-brand__subtitle">@yield('brand_subtitle', 'Une plateforme mode élégante et minimaliste, pensée pour vos looks et vos pièces préférées.')</p>
 
-                <div class="auth-brand__highlights" aria-hidden="true">
-                    <div class="highlight">
-                        <span class="highlight__k">Crème</span>
-                        <span class="highlight__v">#f5f0e8</span>
-                    </div>
-                    <div class="highlight">
-                        <span class="highlight__k">Or</span>
-                        <span class="highlight__v">#c9a96e</span>
-                    </div>
-                    <div class="highlight">
-                        <span class="highlight__k">Noir</span>
-                        <span class="highlight__v">#0a0a0a</span>
-                    </div>
-                </div>
-
                 <p class="auth-brand__foot">© {{ date('Y') }} Trendora</p>
             </div>
         </aside>
