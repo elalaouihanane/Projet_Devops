@@ -33,17 +33,33 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
-          extensions: pdo, pdo_mysql
+          extensions: pdo, pdo_mysql , gd, fileinfo
+          coverage: none
 
-      - name: Installer les dépendances
+      - name: Installer les dépendances Composer
         working-directory: ./backend
-        run: composer install --no-interaction --prefer-dist
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Configurer l'environnement
         working-directory: ./backend
         run: |
           cp .env.example .env
           php artisan key:generate
+
+      - name: Créer le dossier storage
+        working-directory: ./backend
+        run: |
+          mkdir -p storage/app/public/profiles
+          mkdir -p storage/framework/cache
+          mkdir -p storage/framework/sessions
+          mkdir -p storage/framework/testing
+          mkdir -p storage/framework/views
+          mkdir -p storage/logs
+          chmod -R 777 storage
+
+      - name: Créer le lien symbolique storage
+        working-directory: ./backend
+        run: php artisan storage:link    
 
       - name: Migrer la base de données
         working-directory: ./backend
