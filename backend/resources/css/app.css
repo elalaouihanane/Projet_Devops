@@ -1,11 +1,113 @@
-@import 'tailwindcss';
+/* ========== PROFILE HEADER ========== */
+.profile-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+.profile-header {
+    position: relative;
+    background: var(--cream, #f5f0e8);
+    border-radius: 1.5rem;
+    overflow: visible; /* PAS hidden */
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+/* Bannière en haut */
+.profile-banner {
+    height: 180px; /* Hauteur fixe pour la bannière */
+    background: linear-gradient(135deg, #c9a96e 0%, #f5f0e8 100%);
+    border-radius: 1.5rem 1.5rem 0 0;
+}
+
+/* Contenu du header (avatar + infos + actions) */
+.profile-header-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 0 2rem 2rem;
+    margin-top: -60px; /* L'avatar chevauche la bannière */
+    position: relative;
+    z-index: 2;
+    flex-wrap: wrap; /* Responsive */
+}
+
+/* Avatar */
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid white;
+    object-fit: cover;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    flex-shrink: 0; /* Ne pas rétrécir */
+}
+
+/* Infos */
+.profile-meta {
+    flex: 1;
+    min-width: 200px;
+    padding-top: 60px; /* Espace pour le margin-top négatif */
+}
+
+.profile-meta h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
+}
+
+.profile-bio {
+    color: #666;
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+}
+
+.profile-style-badge {
+    display: inline-block;
+    background: #f5f0e8;
+    color: #8b6914;
+    padding: 0.35rem 0.9rem;
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid #e0d5c0;
+}
+
+/* Boutons d'action */
+.profile-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-left: auto;
+    padding-top: 60px;
+    flex-wrap: wrap;
+}
+
+/* Stats en bas */
+.profile-stats {
+    display: flex;
+    justify-content: space-around;
+    padding: 1.5rem 2rem;
+    border-top: 1px solid #e8e0d0;
+    background: rgba(255,255,255,0.5);
+    border-radius: 0 0 1.5rem 1.5rem;
+}
+
+.profile-stats article {
+    text-align: center;
+}
+
+.profile-stats h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 0.25rem;
+}
+
+.profile-stats p {
+    font-size: 0.875rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
