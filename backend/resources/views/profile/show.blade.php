@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+<<<<<<< Updated upstream
 @section('title', 'Profil - ' . $user->name)
 
 @section('content')
@@ -114,3 +115,160 @@
         });
     </script>
 @endsection
+=======
+@section('title', $user->name . ' — Profil — Trendora')
+
+@section('content')
+    <div class="profile-page">
+        <header class="profile-header">
+            <div class="profile-banner" aria-hidden="true"></div>
+            <div class="profile-avatar-wrapper">
+                @if ($user->photo)
+                    <img
+                        class="profile-avatar"
+                        src="{{ Storage::disk('public')->url($user->photo) }}"
+                        alt=""
+                        width="120"
+                        height="120"
+                        loading="lazy"
+                    >
+                @else
+                    <div class="profile-avatar profile-avatar--placeholder" role="img" aria-label="Pas de photo de profil"></div>
+                @endif
+            </div>
+        </header>
+
+        <div class="profile-info">
+            <h1 class="profile-name">{{ $user->name }}</h1>
+            @if ($user->bio)
+                <p class="profile-bio">{{ $user->bio }}</p>
+            @endif
+            @if ($user->style_prefere)
+                <div class="profile-style-badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"/>
+                    </svg>
+                    {{ $user->style_prefere }}
+                </div>
+            @endif
+
+            <div class="profile-stats">
+                <div class="profile-stat">
+                    <div class="profile-stat-value">{{ $articles->count() }}</div>
+                    <div class="profile-stat-label">Publications</div>
+                </div>
+                <div class="profile-stat">
+                    <div class="profile-stat-value">{{ $articles->sum('likes_count') }}</div>
+                    <div class="profile-stat-label">J'aime reçus</div>
+                </div>
+                <div class="profile-stat">
+                    <div class="profile-stat-value">{{ $user->created_at->format('F Y') }}</div>
+                    <div class="profile-stat-label">Membre depuis</div>
+                </div>
+            </div>
+
+            <div class="profile-actions">
+                @auth
+                    @if (Auth::id() === $user->id)
+                        <a class="btn-outline" href="{{ route('profile.edit', $user) }}">Modifier mon profil</a>
+                        <form method="POST" action="{{ route('logout') }}" class="profile-inline-form">
+                            @csrf
+                            <button type="submit" class="navbar-logout">Déconnexion</button>
+                        </form>
+                    @else
+                        <button type="button" class="btn-outline" disabled>Suivre</button>
+                        <button type="button" class="btn-filled" disabled>Message</button>
+                    @endif
+                @else
+                    <button type="button" class="btn-outline" disabled>Suivre</button>
+                    <button type="button" class="btn-filled" disabled>Message</button>
+                @endauth
+            </div>
+        </div>
+
+        <div class="profile-tabs" role="tablist" aria-label="Filtrer les publications">
+            <button type="button" class="profile-tab active" data-profile-tab="all" role="tab" aria-selected="true">Publications</button>
+            <button type="button" class="profile-tab" data-profile-tab="outfit" role="tab" aria-selected="false">Looks</button>
+            <button type="button" class="profile-tab" data-profile-tab="clothing" role="tab" aria-selected="false">Vêtements</button>
+        </div>
+
+        @if ($articles->isEmpty())
+            <div class="empty-state" data-empty-total>
+                <svg viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M32 4L44 18H20L32 4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M16 22h32v38c0 4-4 8-8 8H24c-4 0-8-4-8-8V22z" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M24 34c0 8 4 14 8 14s8-6 8-14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <p>Aucune publication pour le moment</p>
+            </div>
+        @else
+            <div class="articles-grid" data-articles-grid>
+                @foreach ($articles as $article)
+                    <article class="article-card" data-article-type="{{ $article->type }}">
+                        <img
+                            src="{{ asset('storage/' . $article->image) }}"
+                            alt=""
+                            width="400"
+                            height="400"
+                            loading="lazy"
+                        >
+                        <div class="article-overlay">
+                            <span class="article-type-badge">{{ $article->type === 'outfit' ? 'Look' : 'Vêtement' }}</span>
+                            <h2 class="article-title-overlay">{{ $article->title }}</h2>
+                            <p class="article-likes">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                </svg>
+                                {{ $article->likes_count }}
+                            </p>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+            <div class="empty-state empty-state--filtered is-hidden" data-empty-filtered>
+                <p>Aucun contenu dans cet onglet</p>
+            </div>
+        @endif
+    </div>
+
+    <script>
+        (function () {
+            var tabs = document.querySelectorAll('[data-profile-tab]');
+            var grid = document.querySelector('[data-articles-grid]');
+            if (!tabs.length || !grid) return;
+
+            var cards = grid.querySelectorAll('[data-article-type]');
+            var emptyFiltered = document.querySelector('[data-empty-filtered]');
+
+            function setActiveTab(tab) {
+                tabs.forEach(function (btn) {
+                    var on = btn.getAttribute('data-profile-tab') === tab;
+                    btn.classList.toggle('active', on);
+                    btn.setAttribute('aria-selected', on ? 'true' : 'false');
+                });
+            }
+
+            function applyFilter(type) {
+                var visible = 0;
+                cards.forEach(function (card) {
+                    var t = card.getAttribute('data-article-type');
+                    var show = type === 'all' || t === type;
+                    card.style.display = show ? '' : 'none';
+                    if (show) visible++;
+                });
+                if (emptyFiltered) {
+                    emptyFiltered.classList.toggle('is-hidden', visible > 0);
+                }
+            }
+
+            tabs.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var type = btn.getAttribute('data-profile-tab');
+                    setActiveTab(type);
+                    applyFilter(type);
+                });
+            });
+        })();
+    </script>
+@endsection
+>>>>>>> Stashed changes
