@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ArticleController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,7 +21,12 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
 Route::get('/feed', function () {
-    return view('feed');
+    return view('feed.index');
 })
     ->middleware('auth')
     ->name('feed');
+
+// === Articles (Dev 1) ===
+Route::middleware('auth')->group(function () {
+    Route::resource('articles', ArticleController::class);
+});

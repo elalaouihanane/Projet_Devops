@@ -46,6 +46,12 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
+      - name: Créer bootstrap/cache
+        working-directory: ./backend
+        run: |
+          mkdir -p bootstrap/cache
+          chmod 775 bootstrap/cache
+
       - name: Créer le dossier storage
         working-directory: ./backend
         run: |
@@ -81,4 +87,6 @@ jobs:
           DB_DATABASE: trendora
           DB_USERNAME: root
           DB_PASSWORD: root
+          SESSION_DRIVER: array
+          CACHE_STORE: array
         run: php artisan test
