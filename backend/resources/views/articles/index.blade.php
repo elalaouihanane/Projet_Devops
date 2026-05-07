@@ -27,8 +27,16 @@
                     <a href="{{ url('/articles/' . $article->id) }}" style="text-decoration:none;">
                         <div style="display:flex; gap: 14px; align-items:flex-start; flex-wrap: wrap;">
                             <div style="width: 160px; max-width: 100%;">
+                                @php
+                                    $img = (string) ($article->image ?? '');
+                                    $src = \Illuminate\Support\Str::startsWith($img, ['http://', 'https://'])
+                                        ? $img
+                                        : (\Illuminate\Support\Str::startsWith($img, 'uploads/')
+                                            ? asset($img)
+                                            : asset('storage/' . ltrim($img, '/')));
+                                @endphp
                                 <img
-                                    src="{{ asset('storage/' . $article->image) }}"
+                                    src="{{ $src }}"
                                     alt="{{ $article->title }}"
                                     style="width:100%; height: 120px; object-fit: cover; border-radius: 14px; border:1px solid rgba(10,10,10,.10);"
                                 >
