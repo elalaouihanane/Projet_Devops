@@ -58,7 +58,7 @@ class ArticleTest extends TestCase
         $response = $this->post('/articles', [
             'title' => 'Sans auth',
             'type' => 'outfit',
-            'image' => UploadedFile::fake()->image('x.jpg'),
+            'image' => UploadedFile::fake()->create('x.jpg', 100),
         ]);
 
         $response->assertRedirect('/login');
