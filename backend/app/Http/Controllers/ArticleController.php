@@ -5,10 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Cloudinary\Cloudinary;
+use Cloudinary\Configuration\Configuration;
 
 class ArticleController extends Controller
 {
+    private function uploadToCloudinary($file): string
+    {
+        $cloudinary = new Cloudinary(
+            Configuration::instance([
+                'cloud' => [
+                    'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                    'api_key'    => env('CLOUDINARY_API_KEY'),
+                    'api_secret' => env('CLOUDINARY_API_SECRET'),
+                ],
+                'url' => ['secure' => true]
+            ])
+        );
+
+        $result = $cloudinary->uploadApi()->upload($file->getRealPath());
+        return $result['secure_url'];
+    }
+
     public function index()
     {
         $articles = Article::query()
@@ -23,31 +41,30 @@ class ArticleController extends Controller
     public function create()
     {
         $categories = Category::query()->orderBy('name')->get();
-
         return view('articles.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'type' => ['required', 'in:outfit,clothing'],
-            'category_id' => ['nullable', 'exists:categories,id'],
-            'description' => ['nullable', 'string', 'max:2000'],
-            'occasion' => ['nullable', 'string', 'max:100'],
-            'color' => ['nullable', 'string', 'max:50'],
-            'image' => ['required', 'image', 'max:4096'],
-            'tags' => ['nullable', 'array'],
-            'tags.*' => ['string', 'max:50'],
+            'title'        => ['required', 'string', 'max:255'],
+            'type'         => ['required', 'in:outfit,clothing'],
+            'category_id'  => ['nullable', 'exists:categories,id'],
+            'description'  => ['nullable', 'string', 'max:2000'],
+            'occasion'     => ['nullable', 'string', 'max:100'],
+            'color'        => ['nullable', 'string', 'max:50'],
+            'image'        => ['required', 'image', 'max:4096'],
+            'tags'         => ['nullable', 'array'],
+            'tags.*'       => ['string', 'max:50'],
             'is_published' => ['boolean'],
         ]);
 
-        $imagePath = Storage::disk('public')->put('articles', $request->file('image'));
+        $imagePath = $this->uploadToCloudinary($request->file('image'));
 
         $article = Article::create([
             ...$validated,
-            'user_id' => auth()->id(),
-            'image' => $imagePath,
+            'user_id'      => auth()->id(),
+            'image'        => $imagePath,
             'is_published' => (bool)($validated['is_published'] ?? false),
         ]);
 
@@ -76,7 +93,6 @@ class ArticleController extends Controller
         }
 
         $categories = Category::query()->orderBy('name')->get();
-
         return view('articles.edit', compact('article', 'categories'));
     }
 
@@ -89,28 +105,23 @@ class ArticleController extends Controller
         }
 
         $validated = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'type' => ['required', 'in:outfit,clothing'],
-            'category_id' => ['nullable', 'exists:categories,id'],
-            'description' => ['nullable', 'string', 'max:2000'],
-            'occasion' => ['nullable', 'string', 'max:100'],
-            'color' => ['nullable', 'string', 'max:50'],
-            'image' => ['nullable', 'image', 'max:4096'],
-            'tags' => ['nullable', 'array'],
-            'tags.*' => ['string', 'max:50'],
+            'title'        => ['required', 'string', 'max:255'],
+            'type'         => ['required', 'in:outfit,clothing'],
+            'category_id'  => ['nullable', 'exists:categories,id'],
+            'description'  => ['nullable', 'string', 'max:2000'],
+            'occasion'     => ['nullable', 'string', 'max:100'],
+            'color'        => ['nullable', 'string', 'max:50'],
+            'image'        => ['nullable', 'image', 'max:4096'],
+            'tags'         => ['nullable', 'array'],
+            'tags.*'       => ['string', 'max:50'],
             'is_published' => ['boolean'],
         ]);
 
         if ($request->hasFile('image')) {
-            if ($article->image) {
-                Storage::disk('public')->delete($article->image);
-            }
-
-            $validated['image'] = Storage::disk('public')->put('articles', $request->file('image'));
+            $validated['image'] = $this->uploadToCloudinary($request->file('image'));
         }
 
         $validated['is_published'] = (bool)($validated['is_published'] ?? false);
-
         $article->update($validated);
 
         return redirect(url("/articles/{$article->id}"))->with('success', "Article mis à jour.");
@@ -124,13 +135,8 @@ class ArticleController extends Controller
             abort(403);
         }
 
-        if ($article->image) {
-            Storage::disk('public')->delete($article->image);
-        }
-
         $article->delete();
 
         return redirect(url('/articles'))->with('success', "Article supprimé.");
     }
 }
-
