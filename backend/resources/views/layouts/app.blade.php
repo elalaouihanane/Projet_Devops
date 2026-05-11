@@ -31,7 +31,7 @@
                         <a class="btn btn--ghost" href="{{ route('profile.show', auth()->id()) }}">Mon profil</a>
                     @endif
                     <a class="btn btn--ghost" href="{{ route('articles.create') }}">Publier</a>
-                    <a class="btn btn--ghost" href="http://localhost:8081/articles">Mes articles</a>
+                    <a class="btn btn--ghost" href="{{ route('articles.index') }}">Mes articles</a>
                     <span class="app-user">{{ auth()->user()->name }}</span>
                     <form method="POST" action="{{ url('/logout') }}">
                         @csrf
