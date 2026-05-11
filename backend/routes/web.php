@@ -3,10 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\FeedController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// === Feed & Navigation (Dev 3) ===
+Route::get('/', [FeedController::class, 'home'])->name('home');
 
 Route::match(['get', 'post'], '/register', [AuthController::class, 'register'])
     ->middleware('guest')
@@ -20,11 +20,10 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 
-Route::get('/feed', function () {
-    return view('feed.index');
-})
-    ->middleware('auth')
-    ->name('feed');
+Route::middleware('auth')->group(function () {
+    Route::get('/feed', [FeedController::class, 'index'])->name('feed');
+    Route::get('/search', [FeedController::class, 'search'])->name('search');
+});
 
 // === Articles (Dev 1) ===
 Route::middleware('auth')->group(function () {

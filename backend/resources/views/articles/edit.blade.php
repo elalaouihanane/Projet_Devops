@@ -80,19 +80,12 @@
 
             <div class="field">
                 <label>Image actuelle</label>
-                @php
-                    $img = (string) ($article->image ?? '');
-                    $src = \Illuminate\Support\Str::startsWith($img, ['http://', 'https://'])
-                        ? $img
-                        : (\Illuminate\Support\Str::startsWith($img, 'uploads/')
-                            ? asset($img)
-                            : asset('storage/' . ltrim($img, '/')));
-                @endphp
                 <div style="display:flex; gap: 12px; align-items:flex-start; flex-wrap: wrap;">
                     <img
-                        src="{{ $src }}"
+                        src="{{ $article->publicImageUrl() }}"
                         alt="{{ $article->title }}"
                         style="width: 260px; max-width: 100%; height: 160px; object-fit: cover; border-radius: 14px; border:1px solid rgba(10,10,10,.10);"
+                        onerror="this.onerror=null;this.src={{ \Illuminate\Support\Js::from(\App\Models\Article::placeholderImageUrl()) }}"
                     >
                     <div style="min-width: 220px;">
                         <p class="file__name" style="margin-top: 0;">Remplacer l’image</p>

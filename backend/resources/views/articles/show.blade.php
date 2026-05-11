@@ -28,18 +28,11 @@
     </div>
 
     <div class="feed-card">
-        @php
-            $img = (string) ($article->image ?? '');
-            $src = \Illuminate\Support\Str::startsWith($img, ['http://', 'https://'])
-                ? $img
-                : (\Illuminate\Support\Str::startsWith($img, 'uploads/')
-                    ? asset($img)
-                    : asset('storage/' . ltrim($img, '/')));
-        @endphp
         <img
-            src="{{ $src }}"
+            src="{{ $article->publicImageUrl() }}"
             alt="{{ $article->title }}"
             style="width:100%; height: min(520px, 60vh); object-fit: cover; border-radius: 16px; border:1px solid rgba(10,10,10,.10);"
+            onerror="this.onerror=null;this.src={{ \Illuminate\Support\Js::from(\App\Models\Article::placeholderImageUrl()) }}"
         >
 
         <div style="margin-top: 14px; display:flex; gap: 10px; flex-wrap: wrap; align-items:center;">

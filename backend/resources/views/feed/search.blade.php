@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Feed — Trendora')
+@section('title', 'Recherche — Trendora')
 
 @section('content')
     <style>
@@ -26,13 +26,16 @@
         .feed-card__author-name{ font-size: 14px; color: rgba(10,10,10,.78); }
         .feed-empty{ text-align:center; padding: 28px 16px; color: rgba(10,10,10,.65); border: 1px dashed rgba(10,10,10,.16); border-radius: var(--radius); background: rgba(245,240,232,.5); }
         .feed-pagination{ margin-top: 22px; display:flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
+        .feed-back{ margin-bottom: 12px; }
     </style>
+
+    <p class="feed-back"><a class="link" href="{{ route('feed') }}">← Retour au feed</a></p>
 
     <div class="feed-head">
         <div>
             <p class="auth-eyebrow">Trendora</p>
-            <h1 class="feed-title">Votre Feed</h1>
-            <p class="feed-subtitle">Découvrez les dernières inspirations mode.</p>
+            <h1 class="feed-title">Résultats pour : {{ request('search') }}</h1>
+            <p class="feed-subtitle">Affinez votre recherche ci-dessous.</p>
         </div>
     </div>
 
@@ -42,7 +45,8 @@
             <button class="btn btn--primary" type="submit">Rechercher</button>
         </form>
 
-        <form class="feed-filters" method="get" action="{{ route('feed') }}">
+        <form class="feed-filters" method="get" action="{{ route('search') }}">
+            <input type="hidden" name="search" value="{{ request('search') }}">
             <label>
                 Catégorie
                 <select name="category" onchange="this.form.submit()">
@@ -72,7 +76,7 @@
     </div>
 
     @if ($articles->isEmpty())
-        <p class="feed-empty">Aucun article pour le moment.</p>
+        <p class="feed-empty">Aucun article trouvé</p>
     @else
         <div class="feed-grid">
             @foreach ($articles as $article)
