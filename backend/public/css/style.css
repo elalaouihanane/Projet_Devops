@@ -1,0 +1,64 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* container */
+.container {
+    text-align: center;
+}
+
+/* titre Trendora */
+.title {
+    font-size: 40px;
+    margin-bottom: 20px;
+    color: #6f4e37; /* brown */
+}
+
+/* box form */
+.form-box {
+    background: white;
+    padding: 30px;
+    width: 300px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
+/* inputs */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* button */
+button {
+    width: 100%;
+    padding: 10px;
+    background: #6f4e37; /* brown */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #5a3f2d;
+}
+
+/* link */
+.link {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.link a {
+    color: #6f4e37;
+    text-decoration: none;
+}
